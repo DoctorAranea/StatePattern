@@ -6,6 +6,8 @@ namespace States.StatesProject.States
 {
     public class StateFollowing : AbstractFOWState
     {
+        public override string Name { get => "Преследование"; }
+
         protected override void Run()
         {
             Character.mood = GameObject.Mood.Relaxing;

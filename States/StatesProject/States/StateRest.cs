@@ -5,6 +5,8 @@ namespace States.StatesProject.States
 {
     public class StateRest : AbstractState
     {
+        public override string Name { get => "Отдых"; }
+
         private bool isWaiting;
 
         protected override void Run()

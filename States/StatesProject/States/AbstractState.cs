@@ -4,6 +4,7 @@ namespace States.StatesProject.States
 {
     public abstract class AbstractState
     {
+        public abstract string Name { get; }
         public bool IsActivated { get; set; }
         public GameObject Character { get; set; }
 

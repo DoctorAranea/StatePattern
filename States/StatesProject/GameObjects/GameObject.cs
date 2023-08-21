@@ -80,6 +80,9 @@ namespace States.StatesProject.GameObjects
             CurrentState = (AbstractState)state;
             CurrentState.Character = this;
             CurrentState.IsActivated = true;
+
+            if (this is CreationPlayer)
+                control.UpdateStatusLabel();
         }
 
         public void SetState(Type newStateType)
@@ -92,6 +95,9 @@ namespace States.StatesProject.GameObjects
             CurrentState = (AbstractState)state;
             CurrentState.Character = this;
             CurrentState.IsActivated = true;
+
+            if (this is CreationPlayer)
+                control.UpdateStatusLabel();
         }
 
         public virtual void Draw(Graphics g)
@@ -132,16 +138,6 @@ namespace States.StatesProject.GameObjects
 
             Point filteredPoint = StatesControl.Filter(size, location);
             location = filteredPoint;
-        }
-
-        public void KillEnemy()
-        {
-            Rectangle body = new Rectangle(location, size);
-            var objects = control.FindGameObjectsPointsByRect(body);
-            foreach (var obj in objects.Where(x => x is CreationEnemy))
-            {
-                control.DestroyObject(obj as GameObject);
-            }
         }
 
         public void Destroy()

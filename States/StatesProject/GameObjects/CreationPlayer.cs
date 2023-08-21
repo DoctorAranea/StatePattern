@@ -18,6 +18,7 @@ namespace States.StatesProject.GameObjects
 
             stateMouseClick = typeof(StateCursorFollowing);
             stateEnemyObjectFound = typeof(StateKillEnemy);
+            stateNotEnoughEnergy = typeof(StateLookingForFood);
 
             size = new Size(50, 50);
             color = Color.Red;

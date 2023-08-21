@@ -6,6 +6,8 @@ namespace States.StatesProject.States
 {
     public class StateRunAwayOfEnemy : AbstractFOWState
     {
+        public override string Name { get => "Побег"; }
+
         protected override void Run()
         {
             var visibleGameObjects = (Character as Creation).visibleObjects.Where(x => x is GameObject).ToList();

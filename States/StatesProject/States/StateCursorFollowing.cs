@@ -7,6 +7,8 @@ namespace States.StatesProject.States
     {
         Point? targetPoint = null;
 
+        public override string Name { get => "Следование за курсором"; }
+
         protected override void Run()
         {
             Character.mood = GameObject.Mood.Relaxing;

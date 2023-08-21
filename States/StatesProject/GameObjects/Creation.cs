@@ -13,8 +13,10 @@ namespace States.StatesProject.GameObjects
         public Type stateMouseClick;
         public Type stateObjectFound;
         public Type stateEnemyObjectFound;
-        public int fieldOfView;
+        public Type stateNotEnoughEnergy;
         public List<object> visibleObjects;
+        public int fieldOfView;
+        public float energy = 100;
 
         public Creation(StatesControl control, Type currentState) : base(control, currentState)
         {
@@ -33,6 +35,12 @@ namespace States.StatesProject.GameObjects
         {
             CheckFieldOfView();
 
+            if (CurrentState.GetType().Name == defaultState.GetType().Name && energy < 50)
+            {
+                if (stateNotEnoughEnergy != null)
+                    SetState(stateNotEnoughEnergy);
+            }
+
             if (CurrentState.IsActivated)
             {
                 CurrentState.DoAction();
@@ -41,6 +49,18 @@ namespace States.StatesProject.GameObjects
             {
                 SetState(defaultState);
             }
+
+            AddEnergy(-.05f);
+        }
+
+        public void AddEnergy(float value)
+        {
+            if (energy + value > 100)
+                energy = 100;
+            else if (energy + value < 0)
+                energy = 0;
+            else
+                energy += value;
         }
 
         protected void CheckFieldOfView()
@@ -69,6 +89,7 @@ namespace States.StatesProject.GameObjects
         protected virtual void FoundEnemyObject()
         {
             if (stateEnemyObjectFound == null) return;
+            if (energy > 75) return;
 
             if (CurrentState.GetType().Name != stateEnemyObjectFound.Name)
                 SetState(stateEnemyObjectFound);
@@ -80,6 +101,17 @@ namespace States.StatesProject.GameObjects
 
             if (CurrentState.GetType().Name != stateObjectFound.Name)
                 SetState(stateObjectFound);
+        }
+
+        public void KillEnemy()
+        {
+            Rectangle body = new Rectangle(location, size);
+            var objects = control.FindGameObjectsPointsByRect(body);
+            foreach (var obj in objects.Where(x => x is CreationEatable))
+            {
+                control.DestroyObject(obj as GameObject);
+                AddEnergy((obj as CreationEatable).size.Width / 2);
+            }
         }
     }
 }

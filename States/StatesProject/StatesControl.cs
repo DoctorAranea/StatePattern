@@ -11,6 +11,8 @@ namespace States.StatesProject
     public class StatesControl : Control
     {
         private PictureBox behaviour;
+        private ProgressBar energyBar;
+        private Label stateLabel;
         private List<GameObject> gameObjects;
         private CreationPlayer player;
         private Timer timer;
@@ -23,9 +25,9 @@ namespace States.StatesProject
             player = new CreationPlayer(this, typeof(StateFreeMovement));
             SpawnObject(player, new Point(FieldSize.Width / 2, FieldSize.Height / 2));
             
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 10; i++)
             {
-                var enemy = new CreationEnemy(this, typeof(StateFreeMovement));
+                var enemy = new CreationEatable(this, typeof(StateFreeMovement));
                 SpawnObject(enemy, new Point(Rand.Next(0, FieldSize.Width), Rand.Next(0, FieldSize.Height)));
             }
 
@@ -38,6 +40,20 @@ namespace States.StatesProject
             behaviour.Paint += Behaviour_Paint;
             behaviour.MouseClick += Behaviour_MouseClick;
             behaviour.MouseMove += Behaviour_MouseMove;
+
+            energyBar = new ProgressBar();
+            energyBar.Parent = behaviour;
+            energyBar.Maximum = 100;
+            energyBar.Minimum = 0;
+            energyBar.Location = new Point(10, 10);
+            energyBar.Size = new Size(100, 15);
+
+            stateLabel = new Label();
+            stateLabel.Parent = behaviour;
+            stateLabel.Location = new Point(10, 30);
+            stateLabel.MaximumSize = new Size(500, 500);
+            stateLabel.AutoSize = true;
+            stateLabel.BackColor = Color.Transparent;
 
             timer = new Timer();
             timer.Interval = 1;
@@ -52,7 +68,7 @@ namespace States.StatesProject
 
         private void SpawnTimer_Tick(object sender, EventArgs e)
         {
-            var enemy = new CreationEnemy(this, typeof(StateFreeMovement));
+            var enemy = new CreationEatable(this, typeof(StateFreeMovement));
             SpawnObject(enemy, new Point(Rand.Next(0, FieldSize.Width), Rand.Next(0, FieldSize.Height)));
         }
 
@@ -167,7 +183,7 @@ namespace States.StatesProject
                     player.MouseClicked();
                     break;
                 case MouseButtons.Right:
-                    var enemy = new CreationEnemy(this, typeof(StateFreeMovement));
+                    var enemy = new CreationEatable(this, typeof(StateFreeMovement));
                     SpawnObject(enemy, new Point(e.Location.X, e.Location.Y));
                     break;
             }
@@ -175,7 +191,14 @@ namespace States.StatesProject
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            energyBar.Value = (int)player.energy;
             behaviour.Invalidate();
+        }
+
+        public void UpdateStatusLabel()
+        {
+            if (player != null)
+                stateLabel.Text = player.CurrentState.Name;
         }
     }
 }

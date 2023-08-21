@@ -23,10 +23,17 @@ namespace States.StatesProject
 
         public static PointF RemoveUnderOnes(PointF point)
         {
-            if (point.X < 1 && point.X > 0) point.X = 1;
-            if (point.X > -1 && point.X < 0) point.X = -1;
-            if (point.Y < 1 && point.Y > 0) point.Y = 1;
-            if (point.Y > -1 && point.Y < 0) point.Y = -1;
+            if (point.X < 1 && point.X > 0)
+                point.X = point.X > 0.3 ? 1 : 0;
+            if (point.X > -1 && point.X < 0) 
+                //point.X = -1;
+                point.X = point.X < -0.3 ? -1 : 0;
+            if (point.Y < 1 && point.Y > 0) 
+                //point.Y = 1;
+                point.Y = point.Y > 0.3 ? 1 : 0;
+            if (point.Y > -1 && point.Y < 0) 
+                //point.Y = -1;
+                point.Y = point.Y < -0.3 ? -1 : 0;
             return point;
         }
 

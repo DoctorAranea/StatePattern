@@ -6,6 +6,8 @@ namespace States.StatesProject.States
 {
     public class StateKillEnemy : AbstractFOWState
     {
+        public override string Name { get => "Охота"; }
+
         protected override void Run()
         {
             var visibleGameObjects = (Character as Creation).visibleObjects.Where(x => x is GameObject).ToList();
@@ -28,7 +30,8 @@ namespace States.StatesProject.States
                 IsActivated = false;
             }
 
-            Character.KillEnemy();
+            (Character as Creation).KillEnemy();
+            if ((Character as Creation).energy > 95) IsActivated = false;
         }
     }
 }
